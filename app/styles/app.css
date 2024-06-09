@@ -466,3 +466,14 @@ aside li {
 .account-logout {
   display: inline-block;
 }
+
+/*
+* --------------------------------------------------
+* routes/account/favorites
+* --------------------------------------------------
+*/
+.account-favorites {
+  @media (min-width: 768px) {
+    max-width: 400px;
+  }
+}

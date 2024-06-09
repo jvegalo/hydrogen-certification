@@ -1,6 +1,6 @@
-import {Suspense} from 'react';
+import {Suspense, useCallback} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
-import {Await, Link, useLoaderData} from '@remix-run/react';
+import {Await, Link, useLoaderData, useFetcher} from '@remix-run/react';
 import {
   Image,
   Money,
@@ -9,6 +9,8 @@ import {
   CartForm,
 } from '@shopify/hydrogen';
 import {getVariantUrl} from '~/lib/variants';
+import FavoriteProduct from '~/models/favorite-product';
+import {CUSTOMER_DETAILS_QUERY} from '~/graphql/customer-account/CustomerDetailsQuery';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -63,7 +65,65 @@ export async function loader({params, request, context}) {
     variables: {handle},
   });
 
-  return defer({product, variants});
+  let customer_id = '';
+  if (await context.customerAccount.isLoggedIn()) {
+    const {data, errors} = await context.customerAccount.query(
+      CUSTOMER_DETAILS_QUERY,
+    );
+    customer_id = data.customer.id;
+    customer_id = customer_id.split('/').pop();
+    if (errors?.length || !data?.customer) {
+      throw new Error('Customer not found');
+    }
+  }
+
+  const response = await FavoriteProduct.getFavorites(customer_id);
+
+  let isFavoriteProduct = false;
+  if (response.success && Array.isArray(response.data)) {
+    const favoriteProducts = response.data;
+    isFavoriteProduct = favoriteProducts.some(
+      (favoriteProduct) => favoriteProduct.product_id == product.id,
+    );
+  }
+  return defer({product, variants, isFavoriteProduct});
+}
+
+/**
+ * @param {ActionFunctionArgs}
+ */
+export async function action({request, context}) {
+  const formData = await request.formData();
+  const intent = formData.get('intent');
+  const product_id = formData.get('product_id');
+  let customer_id = '';
+  if (intent === 'add-to-favorites') {
+    if (await context.customerAccount.isLoggedIn()) {
+      const {data, errors} = await context.customerAccount.query(
+        CUSTOMER_DETAILS_QUERY,
+      );
+      customer_id = data.customer.id;
+
+      if (errors?.length || !data?.customer) {
+        throw new Error('Customer not found');
+      }
+    }
+    const result = await FavoriteProduct.saveFavorite(product_id, customer_id);
+    return {result};
+  } else if (intent === 'remove-from-favorites') {
+    if (await context.customerAccount.isLoggedIn()) {
+      const {data, errors} = await context.customerAccount.query(
+        CUSTOMER_DETAILS_QUERY,
+      );
+      customer_id = data.customer.id;
+
+      if (errors?.length || !data?.customer) {
+        throw new Error('Customer not found');
+      }
+    }
+    const result = await FavoriteProduct.deleteFavorite(product_id, customer_id);
+    return {result};
+  }
 }
 
 /**
@@ -91,7 +151,7 @@ function redirectToFirstVariant({product, request}) {
 
 export default function Product() {
   /** @type {LoaderReturnData} */
-  const {product, variants} = useLoaderData();
+  const {product, variants, isFavoriteProduct} = useLoaderData();
   const {selectedVariant} = product;
   return (
     <div className="product">
@@ -100,6 +160,7 @@ export default function Product() {
         selectedVariant={selectedVariant}
         product={product}
         variants={variants}
+        isFavoriteProduct={isFavoriteProduct}
       />
     </div>
   );
@@ -132,8 +193,24 @@ function ProductImage({image}) {
  *   variants: Promise<ProductVariantsQuery>;
  * }}
  */
-function ProductMain({selectedVariant, product, variants}) {
+function ProductMain({selectedVariant, product, variants, isFavoriteProduct}) {
   const {title, descriptionHtml} = product;
+  const fetcher = useFetcher();
+
+  const addToFavorites = useCallback(() => {
+    fetcher.submit(
+      {intent: 'add-to-favorites', product_id: product.id},
+      {method: 'post'},
+    );
+  }, []);
+
+  const removeFromFavorites = useCallback(() => {
+    fetcher.submit(
+      {intent: 'remove-from-favorites', product_id: product.id},
+      {method: 'post'},
+    );
+  }, []);
+
   return (
     <div className="product-main">
       <h1>{title}</h1>
@@ -161,6 +238,13 @@ function ProductMain({selectedVariant, product, variants}) {
           )}
         </Await>
       </Suspense>
+      <br />
+      <br />
+      {isFavoriteProduct ? (
+        <button onClick={removeFromFavorites}>Remove from favorites</button>
+      ) : (
+        <button onClick={addToFavorites}>Add to favorites</button>
+      )}
       <br />
       <br />
       <p>
