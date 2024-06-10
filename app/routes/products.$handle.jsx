@@ -86,7 +86,7 @@ export async function loader({params, request, context}) {
       (favoriteProduct) => favoriteProduct.product_id == product.id,
     );
   }
-  return defer({product, variants, isFavoriteProduct});
+  return defer({product, variants, isFavoriteProduct, customer_id});
 }
 
 /**
@@ -96,32 +96,15 @@ export async function action({request, context}) {
   const formData = await request.formData();
   const intent = formData.get('intent');
   const product_id = formData.get('product_id');
-  let customer_id = '';
+  const customer_id = formData.get('customer_id');
   if (intent === 'add-to-favorites') {
-    if (await context.customerAccount.isLoggedIn()) {
-      const {data, errors} = await context.customerAccount.query(
-        CUSTOMER_DETAILS_QUERY,
-      );
-      customer_id = data.customer.id;
-
-      if (errors?.length || !data?.customer) {
-        throw new Error('Customer not found');
-      }
-    }
     const result = await FavoriteProduct.saveFavorite(product_id, customer_id);
     return {result};
   } else if (intent === 'remove-from-favorites') {
-    if (await context.customerAccount.isLoggedIn()) {
-      const {data, errors} = await context.customerAccount.query(
-        CUSTOMER_DETAILS_QUERY,
-      );
-      customer_id = data.customer.id;
-
-      if (errors?.length || !data?.customer) {
-        throw new Error('Customer not found');
-      }
-    }
-    const result = await FavoriteProduct.deleteFavorite(product_id, customer_id);
+    const result = await FavoriteProduct.deleteFavorite(
+      product_id,
+      customer_id,
+    );
     return {result};
   }
 }
@@ -151,7 +134,7 @@ function redirectToFirstVariant({product, request}) {
 
 export default function Product() {
   /** @type {LoaderReturnData} */
-  const {product, variants, isFavoriteProduct} = useLoaderData();
+  const {product, variants, isFavoriteProduct, customer_id} = useLoaderData();
   const {selectedVariant} = product;
   return (
     <div className="product">
@@ -161,6 +144,7 @@ export default function Product() {
         product={product}
         variants={variants}
         isFavoriteProduct={isFavoriteProduct}
+        customer_id={customer_id}
       />
     </div>
   );
@@ -193,24 +177,14 @@ function ProductImage({image}) {
  *   variants: Promise<ProductVariantsQuery>;
  * }}
  */
-function ProductMain({selectedVariant, product, variants, isFavoriteProduct}) {
+function ProductMain({
+  selectedVariant,
+  product,
+  variants,
+  isFavoriteProduct,
+  customer_id,
+}) {
   const {title, descriptionHtml} = product;
-  const fetcher = useFetcher();
-
-  const addToFavorites = useCallback(() => {
-    fetcher.submit(
-      {intent: 'add-to-favorites', product_id: product.id},
-      {method: 'post'},
-    );
-  }, []);
-
-  const removeFromFavorites = useCallback(() => {
-    fetcher.submit(
-      {intent: 'remove-from-favorites', product_id: product.id},
-      {method: 'post'},
-    );
-  }, []);
-
   return (
     <div className="product-main">
       <h1>{title}</h1>
@@ -240,11 +214,11 @@ function ProductMain({selectedVariant, product, variants, isFavoriteProduct}) {
       </Suspense>
       <br />
       <br />
-      {isFavoriteProduct ? (
-        <button onClick={removeFromFavorites}>Remove from favorites</button>
-      ) : (
-        <button onClick={addToFavorites}>Add to favorites</button>
-      )}
+      <AddToFavoritesButton
+        isFavoriteProduct={isFavoriteProduct}
+        product_id={product.id}
+        customer_id={customer_id}
+      />
       <br />
       <br />
       <p>
@@ -384,6 +358,33 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
         </>
       )}
     </CartForm>
+  );
+}
+
+function AddToFavoritesButton({product_id, customer_id, isFavoriteProduct}) {
+  const fetcher = useFetcher();
+  const addToFavorites = useCallback(() => {
+    fetcher.submit(
+      {intent: 'add-to-favorites', product_id, customer_id},
+      {method: 'post'},
+    );
+  }, []);
+
+  const removeFromFavorites = useCallback(() => {
+    fetcher.submit(
+      {intent: 'remove-from-favorites', product_id, customer_id},
+      {method: 'post'},
+    );
+  }, []);
+
+  return (
+    <>
+      {isFavoriteProduct ? (
+        <button onClick={removeFromFavorites}>Remove from favorites</button>
+      ) : (
+        <button onClick={addToFavorites}>Add to favorites</button>
+      )}
+    </>
   );
 }
 
