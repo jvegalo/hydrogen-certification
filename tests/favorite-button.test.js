@@ -1,7 +1,7 @@
 import React from 'react';
 import {render, waitFor, screen, fireEvent} from '@testing-library/react';
 import {createRemixStub} from '@remix-run/testing';
-//import AddToFavoritesButton from '../components/AddToFavoritesButton';
+import AddToFavoritesButton from '../app/components/AddToFavoritesButton';
 import {describe, expect, it, beforeEach, afterEach, vi} from 'vitest';
 
 // Mocking useFetcher from @remix-run/react
