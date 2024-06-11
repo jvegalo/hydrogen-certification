@@ -399,12 +399,16 @@ aside li {
 .product-image img {
   height: auto;
   width: 100%;
+  object-fit: contain;
 }
 
 .product-main {
   align-self: start;
   position: sticky;
   top: 6rem;
+  padding: 5px;
+  border: #C0C0C0 solid 1px;
+  border-radius: 8px;
 }
 
 .product-price-on-sale {

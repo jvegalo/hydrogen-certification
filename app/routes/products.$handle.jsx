@@ -1,6 +1,6 @@
-import {Suspense, useCallback} from 'react';
+import {Suspense} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
-import {Await, Link, useLoaderData, useFetcher} from '@remix-run/react';
+import {Await, Link, useLoaderData} from '@remix-run/react';
 import {
   Image,
   Money,
@@ -11,6 +11,7 @@ import {
 import {getVariantUrl} from '~/lib/variants';
 import FavoriteProduct from '~/models/favorite-product';
 import {CUSTOMER_DETAILS_QUERY} from '~/graphql/customer-account/CustomerDetailsQuery';
+import AddToFavoritesButton from '~/components/AddToFavoritesButton';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -358,33 +359,6 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
         </>
       )}
     </CartForm>
-  );
-}
-
-function AddToFavoritesButton({product_id, customer_id, isFavoriteProduct}) {
-  const fetcher = useFetcher();
-  const addToFavorites = useCallback(() => {
-    fetcher.submit(
-      {intent: 'add-to-favorites', product_id, customer_id},
-      {method: 'post'},
-    );
-  }, []);
-
-  const removeFromFavorites = useCallback(() => {
-    fetcher.submit(
-      {intent: 'remove-from-favorites', product_id, customer_id},
-      {method: 'post'},
-    );
-  }, []);
-
-  return (
-    <>
-      {isFavoriteProduct ? (
-        <button onClick={removeFromFavorites}>Remove from favorites</button>
-      ) : (
-        <button onClick={addToFavorites}>Add to favorites</button>
-      )}
-    </>
   );
 }
 

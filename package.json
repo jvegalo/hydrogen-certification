@@ -15,16 +15,21 @@
   "dependencies": {
     "@remix-run/react": "^2.8.0",
     "@remix-run/server-runtime": "^2.8.0",
+    "@remix-run/testing": "^2.9.2",
     "@shopify/cli": "3.59.2",
     "@shopify/cli-hydrogen": "^8.0.4",
     "@shopify/hydrogen": "2024.4.2",
     "@shopify/remix-oxygen": "^2.0.4",
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "axios": "^1.7.2",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
     "isbot": "^3.8.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "vitest": "^1.6.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.2",
@@ -40,6 +45,7 @@
     "@types/react-dom": "^18.2.7",
     "eslint": "^8.20.0",
     "eslint-plugin-hydrogen": "0.12.2",
+    "jsdom": "^24.1.0",
     "prettier": "^2.8.4",
     "typescript": "^5.2.2",
     "vite": "^5.1.0",
