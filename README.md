@@ -1,45 +1,34 @@
-# Hydrogen template: Skeleton
+# Good American - Hydrogen Storefront
 
-Hydrogen is Shopify’s stack for headless commerce. Hydrogen is designed to dovetail with [Remix](https://remix.run/), Shopify’s full stack web framework. This template contains a **minimal setup** of components, queries and tooling to get started with Hydrogen.
+This storefront is built with Hydrogen and uses a [third party API](https://github.com/jvegalo/good-american-backend) to handle customer's favorite products. Also storefront uses Shopify's Customer API to handle user authentication and identify users whenever they add a product to their favorites.
 
-[Check out Hydrogen docs](https://shopify.dev/custom-storefronts/hydrogen)
-[Get familiar with Remix](https://remix.run/docs/en/v1)
 
-## What's included
+## Storefront URL
 
-- Remix
-- Hydrogen
-- Oxygen
-- Vite
-- Shopify CLI
-- ESLint
-- Prettier
-- GraphQL generator
-- TypeScript and JavaScript flavors
-- Minimal setup of components and routes
+https://gnat-happy-barely.ngrok-free.app
 
-## Getting started
+
+## Local development
 
 **Requirements:**
 
 - Node.js version 18.0.0 or higher
 
-```bash
-npm create @shopify/hydrogen@latest
-```
-
-## Building for production
+**Commands for running the project:**
 
 ```bash
-npm run build
-```
-
-## Local development
-
-```bash
+npm install
 npm run dev
 ```
+Take into account that when running the project locally, you will not be able to use Shopify's Customer API unless you generate a static domain using ngrok which is a requirement to use the API correctly.
 
-## Setup for using Customer Account API (`/account` section)
+Learn more about the Customer API: <https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen#step-1-set-up-a-public-domain-for-local-development>
 
-Follow step 1 and 2 of <https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen#step-1-set-up-a-public-domain-for-local-development>
+## Unit Testing
+
+Tests are located in "tests/favorite-button.test.js"
+To run the tests, simply run:
+
+```bash
+npx vitest
+```
