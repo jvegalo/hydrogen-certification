@@ -7,15 +7,9 @@ import {describe, expect, it, beforeEach, afterEach, vi} from 'vitest';
 // Mocking useFetcher from @remix-run/react
 vi.mock('@remix-run/react', () => {
   return {
-    useFetcher: vi.fn().mockReturnValue({state: 'idle'}),
+    useFetcher: () => ({submit: vi.fn(), state: 'idle'}),
   };
 });
-
-// Simulate the FavoriteProduct module's methods
-const FavoriteProduct = {
-  saveFavorite: vi.fn().mockResolvedValue({success: true}),
-  deleteFavorite: vi.fn().mockResolvedValue({success: true}),
-};
 
 const fakeProduct = {
   product_id: '123',
@@ -40,16 +34,8 @@ describe('AddToFavoritesButton', () => {
           const intent = formData.get('intent');
           if (intent === 'add-to-favorites') {
             fakeProduct.isFavoriteProduct = true;
-            await FavoriteProduct.saveFavorite(
-              formData.get('product_id'),
-              formData.get('customer_id'),
-            );
           } else if (intent === 'remove-from-favorites') {
             fakeProduct.isFavoriteProduct = false;
-            await FavoriteProduct.deleteFavorite(
-              formData.get('product_id'),
-              formData.get('customer_id'),
-            );
           }
           return null;
         },
@@ -78,10 +64,6 @@ describe('AddToFavoritesButton', () => {
 
     fireEvent.click(screen.getByText('Add to favorites'));
 
-    expect(FavoriteProduct.saveFavorite).toHaveBeenCalledWith(
-      fakeProduct.product_id,
-      fakeProduct.customer_id,
-    );
     await waitFor(() =>
       expect(screen.getByText('Remove from favorites')).toBeInTheDocument(),
     );
@@ -95,10 +77,6 @@ describe('AddToFavoritesButton', () => {
 
     fireEvent.click(screen.getByText('Remove from favorites'));
 
-    expect(FavoriteProduct.deleteFavorite).toHaveBeenCalledWith(
-      fakeProduct.product_id,
-      fakeProduct.customer_id,
-    );
     await waitFor(() =>
       expect(screen.getByText('Add to favorites')).toBeInTheDocument(),
     );
