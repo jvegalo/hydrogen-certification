@@ -2,7 +2,8 @@ import axios from 'axios';
 
 class GoodAmericanApiClient {
   static client = axios.create({
-    baseURL: 'http://localhost:4000/',
+    // baseURL: 'http://localhost:80/',
+    baseURL: 'http://18.118.193.60:80/',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
