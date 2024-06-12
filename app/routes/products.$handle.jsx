@@ -82,7 +82,6 @@ export async function loader({params, request, context}) {
 
   try {
     const response = await FavoriteProduct.getFavorites(customer_id);
-
     if (response.success && Array.isArray(response.data)) {
       const favoriteProducts = response.data;
       isFavoriteProduct = favoriteProducts.some(

@@ -30,6 +30,7 @@ export async function loader({context}) {
 
   try {
     const response = await FavoriteProduct.getFavorites(customer_id);
+    console.log(JSON.stringify(response));
 
     for (const favoriteProduct of response.data) {
       const {product} = await storefront.query(PRODUCT_QUERY, {
