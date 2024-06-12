@@ -32,11 +32,13 @@ export async function loader({context}) {
     const response = await FavoriteProduct.getFavorites(customer_id);
     console.log(JSON.stringify(response));
 
-    for (const favoriteProduct of response.data) {
-      const {product} = await storefront.query(PRODUCT_QUERY, {
-        variables: {id: favoriteProduct.product_id},
-      });
-      favoriteProducts.push(product);
+    if (response.success) {
+      for (const favoriteProduct of response.data) {
+        const {product} = await storefront.query(PRODUCT_QUERY, {
+          variables: {id: favoriteProduct.product_id},
+        });
+        favoriteProducts.push(product);
+      }
     }
   } catch (error) {
     console.log(JSON.stringify(error));
