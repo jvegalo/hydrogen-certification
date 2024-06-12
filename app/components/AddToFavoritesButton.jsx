@@ -21,8 +21,14 @@ export default function AddToFavoritesButton({
     );
   }, [fetcher, product_id, customer_id]);
 
+  if (!customer_id) {
+    return null;
+  }
+
   return (
     <>
+      <br />
+      <br />
       {isFavoriteProduct ? (
         <button onClick={removeFromFavorites}>Remove from favorites</button>
       ) : (

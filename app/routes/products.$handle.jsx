@@ -220,8 +220,6 @@ function ProductMain({
           )}
         </Await>
       </Suspense>
-      <br />
-      <br />
       <AddToFavoritesButton
         isFavoriteProduct={isFavoriteProduct}
         product_id={product.id}
