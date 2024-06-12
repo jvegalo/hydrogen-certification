@@ -12,6 +12,7 @@ export default class FavoriteProduct {
         data: [...favorites.data],
       };
     } catch (error) {
+      console.log(JSON.stringify(error));
       return {
         success: false,
         error: 'Error to get favorite products',
@@ -34,6 +35,7 @@ export default class FavoriteProduct {
         product: product_id,
       };
     } catch (error) {
+      console.log(JSON.stringify(error));
       return {
         success: false,
         error: 'Error to save favorite product',
@@ -56,6 +58,7 @@ export default class FavoriteProduct {
         product: product_id,
       };
     } catch (error) {
+      console.log(JSON.stringify(error));
       return {
         success: false,
         error: 'Error to save delete product',
