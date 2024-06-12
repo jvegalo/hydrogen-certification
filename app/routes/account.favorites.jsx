@@ -38,6 +38,7 @@ export async function loader({context}) {
       favoriteProducts.push(product);
     }
   } catch (error) {
+    console.log(JSON.stringify(error));
     throw new Error(error);
   }
   return json(

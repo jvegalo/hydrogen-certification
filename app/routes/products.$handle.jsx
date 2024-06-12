@@ -78,15 +78,22 @@ export async function loader({params, request, context}) {
     }
   }
 
-  const response = await FavoriteProduct.getFavorites(customer_id);
-
   let isFavoriteProduct = false;
-  if (response.success && Array.isArray(response.data)) {
-    const favoriteProducts = response.data;
-    isFavoriteProduct = favoriteProducts.some(
-      (favoriteProduct) => favoriteProduct.product_id == product.id,
-    );
+
+  try {
+    const response = await FavoriteProduct.getFavorites(customer_id);
+
+    if (response.success && Array.isArray(response.data)) {
+      const favoriteProducts = response.data;
+      isFavoriteProduct = favoriteProducts.some(
+        (favoriteProduct) => favoriteProduct.product_id == product.id,
+      );
+    }
+  } catch (error) {
+    console.log(JSON.stringify(error));
+    throw new Error(error);
   }
+
   return defer({product, variants, isFavoriteProduct, customer_id});
 }
 
@@ -100,6 +107,7 @@ export async function action({request, context}) {
   const customer_id = formData.get('customer_id');
   if (intent === 'add-to-favorites') {
     const result = await FavoriteProduct.saveFavorite(product_id, customer_id);
+    console.log(JSON.stringify(result));
     return {result};
   } else if (intent === 'remove-from-favorites') {
     const result = await FavoriteProduct.deleteFavorite(
