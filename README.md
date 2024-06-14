@@ -30,5 +30,6 @@ Tests are located in "tests/favorite-button.test.js"
 To run the tests, simply run:
 
 ```bash
+npm install
 npx vitest
 ```
