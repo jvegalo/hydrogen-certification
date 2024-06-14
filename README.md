@@ -33,7 +33,7 @@ npm install
 npm run dev
 ```
 > [!NOTE]
-> Take into account that when running the project locally, you will not be able to use Shopify's Customer API unless you generate a static domain using ngrok which is a Shopify requirement to > use the API locally.
+> Take into account that when running the project locally, you will not be able to use Shopify's Customer API unless you generate a static domain using ngrok which is a Shopify requirement to use the API locally. With that being said, please test the addToFavorites feature using the Storefront URL: https://gnat-happy-barely.ngrok-free.app
 
 
 Learn more about the Customer API: <https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen#step-1-set-up-a-public-domain-for-local-development>
@@ -41,7 +41,7 @@ Learn more about the Customer API: <https://shopify.dev/docs/custom-storefronts/
 ## Unit Testing
 
 Tests are located in "tests/favorite-button.test.js"
-To run the tests, simply run:
+To run the tests, simply run the following commands while being in the root of the project:
 
 ```bash
 npm install
