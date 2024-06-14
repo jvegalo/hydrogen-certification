@@ -100,13 +100,13 @@ export async function loader({params, request, context}) {
  * @param {ActionFunctionArgs}
  */
 export async function action({request, context}) {
+  console.log(JSON.stringify('Inside favorites action'));
   const formData = await request.formData();
   const intent = formData.get('intent');
   const product_id = formData.get('product_id');
   const customer_id = formData.get('customer_id');
   if (intent === 'add-to-favorites') {
     const result = await FavoriteProduct.saveFavorite(product_id, customer_id);
-    console.log(JSON.stringify(result));
     return {result};
   } else if (intent === 'remove-from-favorites') {
     const result = await FavoriteProduct.deleteFavorite(
