@@ -41,8 +41,10 @@ Learn more about the Customer API: <https://shopify.dev/docs/custom-storefronts/
 ## Unit Testing
 
 Tests are located in "tests/favorite-button.test.js"
-To run the tests, simply run the following commands while being in the root of the project:
 
+- Run the backend locally, here the [instructions](https://github.com/jvegalo/good-american-backend)
+
+- Run the following commands while being in the root of the project:
 ```bash
 npm install
 npx vitest
