@@ -6,6 +6,8 @@ This storefront is built with Hydrogen and uses a [third party API](https://gith
 ## Storefront URL
 
 https://gnat-happy-barely.ngrok-free.app
+> [!WARNING]
+> The ngrok server may be down during the weekend because I am running it locally and I am coming back from a crypto conference in The Netherlands, so I cannot run the server due to Airport WIFI restrictions. Thank you for your patience.
 
 
 ## Local development
