@@ -32,7 +32,9 @@ SESSION_SECRET=580fa5d615732210a75085361cd0ec85044a9a18
 npm install
 npm run dev
 ```
-Take into account that when running the project locally, you will not be able to use Shopify's Customer API unless you generate a static domain using ngrok which is a requirement to use the API correctly.
+> [!NOTE]
+> Take into account that when running the project locally, you will not be able to use Shopify's Customer API unless you generate a static domain using ngrok which is a Shopify requirement to > use the API locally.
+
 
 Learn more about the Customer API: <https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen#step-1-set-up-a-public-domain-for-local-development>
 
