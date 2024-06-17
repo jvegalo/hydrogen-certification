@@ -6,13 +6,13 @@ This storefront is built with Hydrogen and uses a [third party API](https://gith
 ## Storefront URL
 
 https://gnat-happy-barely.ngrok-free.app
-> [!WARNING]
-> The ngrok server may be down during the weekend because I am running it locally and I am coming back from a crypto conference in The Netherlands, so I cannot run the server due to Airport WIFI restrictions. Thank you for your patience.
 
 
 ## Local development
 
 **Requirements:**
+
+- Run the backend locally, here the [instructions](https://github.com/jvegalo/good-american-backend)
 
 - Node.js version 18.0.0 or higher
 
@@ -35,7 +35,7 @@ npm install
 npm run dev
 ```
 > [!NOTE]
-> Take into account that when running the project locally, you will not be able to use Shopify's Customer API unless you generate a static domain using ngrok which is a Shopify requirement to use the API locally. With that being said, please use the addToFavorites feature using the Storefront URL: https://gnat-happy-barely.ngrok-free.app
+> Take into account that when running the project locally, you will not be able to use Shopify's Customer API unless you generate a static domain using ngrok which is a Shopify requirement to use the API locally. With that being said, please use the addToFavorites feature browsing the Storefront URL: https://gnat-happy-barely.ngrok-free.app
 
 
 Learn more about the Customer API: <https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen#step-1-set-up-a-public-domain-for-local-development>
